@@ -4,6 +4,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import logger from './config/logger.js';
 import database from './config/database.js';
 import authRoutes from './routes/auth.js';
@@ -14,6 +16,9 @@ import analyticsRoutes from './routes/analytics.js';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -62,7 +67,7 @@ app.use('/api/analytics', analyticsRoutes);
 
 // Serve Frontend
 app.get('/', (req, res) => {
-  res.sendFile(new URL('./index.html', import.meta.url).pathname);
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // 404 Handler
